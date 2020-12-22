@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# Soduku web app created by React
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

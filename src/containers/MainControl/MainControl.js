@@ -10,6 +10,7 @@ function MainControl(props) {
   const dispatch = useDispatch();
   const onLevelChange = (level) => dispatch(actions.levelChanged(level));
   const onNewGameStart = () => dispatch(actions.initNewGameLoading());
+  const onGameReset = () => dispatch(actions.resetGame());
 
   let radioButtons = [];
   for (let key in LEVEL) {
@@ -33,7 +34,9 @@ function MainControl(props) {
       <Button type="primary" onClick={onNewGameStart}>
         New Game
       </Button>
-      <Button type="primary">Reset</Button>
+      <Button type="primary" onClick={onGameReset}>
+        Reset
+      </Button>
     </div>
   );
 }

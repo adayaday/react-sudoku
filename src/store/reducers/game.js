@@ -1,6 +1,7 @@
 import * as actionTypes from "../actions/actionsTypes";
-import { updateObject } from "../../shared/utility";
+import { updateObject, validate } from "../../shared/utility";
 import * as games from "../../components/games/games";
+import { BOARD_LENGTH } from "../../constants";
 
 const { LEVEL } = require("../../constants");
 
@@ -8,7 +9,9 @@ const initialState = {
   level: LEVEL.Easy,
   isPlaying: false,
   gameIndex: 0,
-  board: null,
+  board: "0".repeat(BOARD_LENGTH).split(""),
+  cellFixedValue: Array(BOARD_LENGTH).fill(false),
+  valid: Array(BOARD_LENGTH).fill(true),
 };
 
 const levelChanged = (state, action) => {
@@ -16,19 +19,54 @@ const levelChanged = (state, action) => {
 };
 
 const newGameLoaded = (state, action) => {
-  let board = "";
   let index = 0;
   if (state.level === LEVEL.Easy) {
     index = Math.floor(Math.random() * games.easy.length);
-    board = games.easy[index];
   } else if (state.level === LEVEL.Medium) {
     index = Math.floor(Math.random() * games.medium.length);
-    board = games.medium[index];
   } else {
     index = Math.floor(Math.random() * games.hard.length);
-    board = games.hard[index];
   }
-  return updateObject(state, { board: board, gameIndex: index });
+  return updateObject(
+    state,
+    updateObject({ gameIndex: index }, reloadGameData(state, index))
+  );
+};
+
+const resetGame = (state, action) => {
+  return updateObject(state, reloadGameData(state, state.gameIndex));
+};
+
+const reloadGameData = (state, index) => {
+  let boardString = "";
+  if (state.level === LEVEL.Easy) {
+    boardString = games.easy[index];
+  } else if (state.level === LEVEL.Medium) {
+    boardString = games.medium[index];
+  } else {
+    boardString = games.hard[index];
+  }
+  const newBoard = boardString.split("");
+  const newValid = Array(BOARD_LENGTH).fill(true);
+  const newCellFixedValue = newBoard.map((cell) => cell !== "0");
+  return {
+    board: newBoard,
+    cellFixedValue: newCellFixedValue,
+    valid: newValid,
+  };
+};
+
+const cellValueChanged = (state, action) => {
+  if (
+    state.cellFixedValue[action.index] ||
+    action.value.length > 1 ||
+    (action.value.length === 1 && (action.value < "1" || action.value > "9"))
+  ) {
+    return state;
+  }
+  const newBoard = [...state.board];
+  newBoard[action.index] = action.value;
+  return updateObject(state, { board: newBoard, valid: validate(newBoard) });
 };
 
 const game = (state = initialState, action) => {
@@ -37,6 +75,10 @@ const game = (state = initialState, action) => {
       return levelChanged(state, action);
     case actionTypes.NEW_GAME_LOADING:
       return newGameLoaded(state, action);
+    case actionTypes.RESET_GAME:
+      return resetGame(state, action);
+    case actionTypes.CELL_VALUE_CHANGED:
+      return cellValueChanged(state, action);
     default:
       return state;
   }

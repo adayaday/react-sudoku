@@ -1,3 +1,4 @@
+/*ref: https://codepen.io/sdobson/pen/aEWBQw*/
 .board {
     display: grid;
     grid-template-columns: repeat(9, 50px);
@@ -50,6 +51,11 @@
     border-left-width: 4px;
 }
 
+/*.cell:focus, .cell:hover, .cell:active {*/
+/*    background-color: #FB903950;*/
+/*    outline: none;*/
+/*}*/
+
 .cellSpan {
     margin-top: 0.2rem;
 }
@@ -66,7 +72,16 @@
     z-index: 100;
 }
 
-.input:focus {
+.inputFixed {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.inputError {
+    color: red;
+}
+
+.input:focus, .input:hover {
     background-color: #FB903950;
     outline: none;
 }

@@ -51,10 +51,33 @@
     border-left-width: 4px;
 }
 
-/*.cell:focus, .cell:hover, .cell:active {*/
-/*    background-color: #FB903950;*/
-/*    outline: none;*/
-/*}*/
+.cell:focus, .cell:hover, .cell:active {
+    background-color: #FB903950;
+    outline: none;
+    cursor: pointer;
+}
+
+.cellFixed {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.cellError {
+    animation: error 0.5s linear;
+    color: red;
+}
+
+.cellSelected {
+    background-color: #a3d2caB0;
+}
+
+.cellConnected {
+    background-color: #a3d2ca50;
+}
+
+.cellSameValue {
+    background-color: #a3d2caB0;
+}
 
 .cellSpan {
     margin-top: 0.2rem;
@@ -66,10 +89,12 @@
     height: 100%;
     width: 100%;
     background-color: #FB903900;
+    display: flex;
+    justify-content: center;
+    align-content: center;
     margin: auto auto;
     text-align: center;
     font-size: 20px;
-    z-index: 100;
 }
 
 .inputFixed {
@@ -84,13 +109,24 @@
 
 @keyframes error {
     0% {
-        transform: scale(1);
+        font-size: 20px;
+        /*transform: scale(1);*/
     }
-    60% {
-        transform: scale(1.5);
+    20% {
+        font-size: 32px;
+        /*transform: scale(1.5);*/
+    }
+    40% {
+        font-size: 40px;
+        /*transform: scale(1.5);*/
+    }
+    70% {
+        font-size: 32px;
+        /*transform: scale(1.5);*/
     }
     100% {
-        transform: scale(1);
+        font-size: 20px;
+        /*transform: scale(1);*/
     }
 }
 

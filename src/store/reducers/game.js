@@ -1,17 +1,15 @@
 import * as actionTypes from "../actions/actionsTypes";
 import { updateObject, validate } from "../../shared/utility";
 import * as games from "../../components/games/games";
-import { BOARD_LENGTH } from "../../constants";
-
-const { LEVEL } = require("../../constants");
+import { LEVEL, BOARD_SIZE, VALID_CLEAR_INPUT } from "../../constants";
 
 const initialState = {
   level: LEVEL.Easy,
   isPlaying: false,
   gameIndex: 0,
-  board: "0".repeat(BOARD_LENGTH).split(""),
-  cellFixedValue: Array(BOARD_LENGTH).fill(false),
-  valid: Array(BOARD_LENGTH).fill(true),
+  board: "0".repeat(BOARD_SIZE).split(""),
+  cellFixedValue: Array(BOARD_SIZE).fill(false),
+  valid: Array(BOARD_SIZE).fill(true),
 };
 
 const levelChanged = (state, action) => {
@@ -47,7 +45,7 @@ const reloadGameData = (state, index) => {
     boardString = games.hard[index];
   }
   const newBoard = boardString.split("");
-  const newValid = Array(BOARD_LENGTH).fill(true);
+  const newValid = Array(BOARD_SIZE).fill(true);
   const newCellFixedValue = newBoard.map((cell) => cell !== "0");
   return {
     board: newBoard,
@@ -57,15 +55,15 @@ const reloadGameData = (state, index) => {
 };
 
 const cellValueChanged = (state, action) => {
-  if (
-    state.cellFixedValue[action.index] ||
-    action.value.length > 1 ||
-    (action.value.length === 1 && (action.value < "1" || action.value > "9"))
-  ) {
+  if (state.cellFixedValue[action.index]) {
     return state;
   }
+  let keyStr = action.value;
+  if (VALID_CLEAR_INPUT.indexOf(keyStr) > -1) {
+    keyStr = "";
+  }
   const newBoard = [...state.board];
-  newBoard[action.index] = action.value;
+  newBoard[action.index] = keyStr;
   return updateObject(state, { board: newBoard, valid: validate(newBoard) });
 };
 

@@ -1,4 +1,4 @@
-import { BOARD_LENGTH, BOARD_N } from "../constants";
+import { BOARD_SIZE, BOARD_LENGTH, BLOCK_LENGTH, N_BLOCKS } from "../constants";
 
 export const updateObject = (oldObject, updatedProperties) => {
   return {
@@ -8,44 +8,46 @@ export const updateObject = (oldObject, updatedProperties) => {
 };
 
 export const validate = (board) => {
-  const valid = Array(BOARD_LENGTH).fill(true);
+  const valid = Array(BOARD_SIZE).fill(true);
   let currentValid = true;
-  for (let x = 0; x < BOARD_N; x++) {
-    for (let y = 0; y < BOARD_N; y++) {
-      if (board[x + BOARD_N * y] === "0") {
+  let currentIndex = 0;
+  for (let x = 0; x < BOARD_LENGTH; x++) {
+    for (let y = 0; y < BOARD_LENGTH; y++) {
+      currentIndex = getIndex(x, y);
+      if (board[currentIndex] === "0") {
         continue;
       }
       currentValid = true;
       // check x direction
-      for (let xx = 0; xx < BOARD_N; xx++) {
-        if (xx !== x && board[xx + BOARD_N * y] === board[x + BOARD_N * y]) {
+      for (let xx = 0; xx < BOARD_LENGTH; xx++) {
+        if (xx !== x && board[getIndex(xx, y)] === board[currentIndex]) {
           currentValid = false;
           break;
         }
       }
       if (!currentValid) {
-        valid[x + BOARD_N * y] = currentValid;
+        valid[currentIndex] = currentValid;
         continue;
       }
       // check y direction
-      for (let yy = 0; yy < BOARD_N; yy++) {
-        if (yy !== y && board[x + BOARD_N * yy] === board[x + BOARD_N * y]) {
+      for (let yy = 0; yy < BOARD_LENGTH; yy++) {
+        if (yy !== y && board[getIndex(x, yy)] === board[currentIndex]) {
           currentValid = false;
           break;
         }
       }
       if (!currentValid) {
-        valid[x + BOARD_N * y] = currentValid;
+        valid[currentIndex] = currentValid;
         continue;
       }
       // check block
-      const startX = Math.floor(x / 3) * 3;
-      const startY = Math.floor(y / 3) * 3;
-      for (let xx = startX; xx < startX + 3; xx++) {
-        for (let yy = startY; yy < startY + 3; yy++) {
+      const startX = Math.floor(x / BLOCK_LENGTH) * BLOCK_LENGTH;
+      const startY = Math.floor(y / BLOCK_LENGTH) * BLOCK_LENGTH;
+      for (let xx = startX; xx < startX + BLOCK_LENGTH; xx++) {
+        for (let yy = startY; yy < startY + BLOCK_LENGTH; yy++) {
           if (
             (xx !== x || yy !== y) &&
-            board[x + BOARD_N * y] === board[xx + BOARD_N * yy]
+            board[currentIndex] === board[getIndex(xx, yy)]
           ) {
             currentValid = false;
             break;
@@ -55,8 +57,28 @@ export const validate = (board) => {
           }
         }
       }
-      valid[x + BOARD_N * y] = currentValid;
+      valid[currentIndex] = currentValid;
     }
   }
   return valid;
+};
+
+export const cellConnected = (i, j) => {
+  return (
+    i % BOARD_LENGTH === j % BOARD_LENGTH ||
+    Math.floor(i / BOARD_LENGTH) === Math.floor(j / BOARD_LENGTH) ||
+    getBlock(i) === getBlock(j)
+  );
+};
+
+export const getIndex = (x, y) => x + BOARD_LENGTH + y;
+
+export const getXY = (index) => [
+  index % BOARD_LENGTH,
+  Math.floor(index / BOARD_LENGTH),
+];
+
+export const getBlock = (index) => {
+  const [x, y] = getXY(index);
+  return Math.floor(y / BLOCK_LENGTH) * N_BLOCKS + Math.floor(x / BLOCK_LENGTH);
 };

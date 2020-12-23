@@ -1,0 +1,9 @@
+.NewGame {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.radioGroup {
+    margin: auto 20px;
+}

@@ -1,0 +1,14 @@
+.logo {
+    height: 40px;
+    margin: auto 10px;
+}
+
+.header {
+    background-color: #FB9039;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: white;
+    font-size: 30px;
+}

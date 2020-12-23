@@ -14,7 +14,11 @@ function Board(props) {
     <ul className={classes.board}>
       {board.map((cell, idx) => (
         <li key={idx} className={classes.cell}>
-          <span className={classes.cellSpan}>{cell !== "0" ? cell : null}</span>
+          <input
+            className={classes.input}
+            type="number"
+            value={cell !== "0" ? cell : null}
+          />
         </li>
       ))}
     </ul>

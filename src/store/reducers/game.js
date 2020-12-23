@@ -1,7 +1,7 @@
 import * as actionTypes from "../actions/actionsTypes";
 import { updateObject, validate } from "../../shared/utility";
 import * as games from "../../components/games/games";
-import { LEVEL, BOARD_SIZE, VALID_CLEAR_INPUT } from "../../constants";
+import { LEVEL, BOARD_SIZE } from "../../constants";
 
 const initialState = {
   level: LEVEL.Easy,
@@ -58,12 +58,8 @@ const cellValueChanged = (state, action) => {
   if (state.cellFixedValue[action.index]) {
     return state;
   }
-  let keyStr = action.value;
-  if (VALID_CLEAR_INPUT.indexOf(keyStr) > -1) {
-    keyStr = "";
-  }
   const newBoard = [...state.board];
-  newBoard[action.index] = keyStr;
+  newBoard[action.index] = action.value;
   return updateObject(state, { board: newBoard, valid: validate(newBoard) });
 };
 

@@ -1,14 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 
 import classes from "./Game.module.css";
 import Board from "./Board/Board";
-import InputControl from "./InputControl/InputControl";
+import InputControl from "../../components/InputControl/InputControl";
+import { useDispatch } from "react-redux";
+import * as actions from "../../store/actions";
+import { Button } from "antd";
+import { getKeyChar } from "../../shared/utility";
 
 function Game(props) {
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectedNum, setSelectedNum] = useState("0");
+
+  const dispatch = useDispatch();
+  const onCellValueChanged = (index, value) =>
+    dispatch(actions.cellValueChanged(index, value));
+
+  const inputControlClickedHandler = (keyStr) => {
+    const keyChar = getKeyChar(keyStr);
+    if (selectedIndex) {
+      onCellValueChanged(selectedIndex, keyChar);
+    }
+    setSelectedNum(keyChar);
+  };
+
   return (
     <div className={classes.Game}>
-      <Board />
-      <InputControl />
+      <Button
+        type="primary"
+        onClick={() => {
+          setSelectedIndex(null);
+          setSelectedNum("0");
+        }}
+      >
+        Clear Selection
+      </Button>
+      <Board
+        selectedIndex={selectedIndex}
+        setSelectedIndex={setSelectedIndex}
+        selectedNum={selectedNum}
+        setSelectedNum={setSelectedNum}
+        onCellValueChanged={onCellValueChanged}
+      />
+      <InputControl
+        selectedNum={selectedNum}
+        onClick={inputControlClickedHandler}
+      />
     </div>
   );
 }

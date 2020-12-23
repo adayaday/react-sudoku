@@ -22,6 +22,10 @@
     font-size: 40px;
 }
 
+.cellSameValue {
+    background-color: #a3d2caB0;
+}
+
 /*left edge*/
 .cell:nth-child(5n + 1) {
     border-left-width: 4px;

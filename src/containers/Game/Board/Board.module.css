@@ -7,9 +7,10 @@
     align-content: center;
     grid-gap: 0;
     list-style: none;
-    margin: 0 0 2vw;
+    margin: 0 auto 2vw;
     padding: 0;
     font-size: 20px;
+    width: 370px;
 }
 
 .cell {
@@ -72,11 +73,11 @@
 }
 
 .cellConnected {
-    background-color: #a3d2ca50;
+    background-color: #a3d2ca40;
 }
 
 .cellSameValue {
-    background-color: #a3d2caB0;
+    background-color: #a3d2caC0;
 }
 
 .cellSpan {

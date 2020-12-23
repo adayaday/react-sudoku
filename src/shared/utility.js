@@ -1,10 +1,23 @@
-import { BOARD_SIZE, BOARD_LENGTH, BLOCK_LENGTH, N_BLOCKS } from "../constants";
+import {
+  BOARD_SIZE,
+  BOARD_LENGTH,
+  BLOCK_LENGTH,
+  N_BLOCKS,
+  VALID_CLEAR_INPUT,
+} from "../constants";
 
 export const updateObject = (oldObject, updatedProperties) => {
   return {
     ...oldObject,
     ...updatedProperties,
   };
+};
+
+export const getKeyChar = (keyStr) => {
+  if (VALID_CLEAR_INPUT.indexOf(keyStr) > -1) {
+    keyStr = "0";
+  }
+  return keyStr;
 };
 
 export const validate = (board) => {
@@ -71,7 +84,7 @@ export const cellConnected = (i, j) => {
   );
 };
 
-export const getIndex = (x, y) => x + BOARD_LENGTH + y;
+export const getIndex = (x, y) => x + BOARD_LENGTH * y;
 
 export const getXY = (index) => [
   index % BOARD_LENGTH,

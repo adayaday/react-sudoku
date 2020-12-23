@@ -2,9 +2,14 @@ import React from "react";
 import classes from "./Board.module.css";
 
 function Board(props) {
-  const board = "040000000002800003001376020007008106409060208506900700060291300200004900000000040".split(
-    ""
-  );
+  const { boardString } = props;
+  let board = "";
+  if (boardString && boardString.length === 81) {
+    board = boardString.split("");
+  } else {
+    board = "0".repeat(81).split("");
+  }
+
   return (
     <ul className={classes.board}>
       {board.map((cell, idx) => (

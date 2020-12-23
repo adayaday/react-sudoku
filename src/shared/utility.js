@@ -12,6 +12,9 @@ export const validate = (board) => {
   let currentValid = true;
   for (let x = 0; x < BOARD_N; x++) {
     for (let y = 0; y < BOARD_N; y++) {
+      if (board[x + BOARD_N * y] === "0") {
+        continue;
+      }
       currentValid = true;
       // check x direction
       for (let xx = 0; xx < BOARD_N; xx++) {

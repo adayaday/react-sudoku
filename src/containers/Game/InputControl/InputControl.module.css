@@ -1,0 +1,48 @@
+.inputControl {
+    display: grid;
+    grid-template-columns: repeat(5, 70px);
+    grid-template-rows: repeat(2, 70px);
+    justify-content: center;
+    align-content: center;
+    grid-gap: 0;
+    list-style: none;
+    margin: 20px 0 2vw;
+    padding: 0;
+}
+
+.cell {
+    box-sizing: content-box;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    border: 2px solid #FB9039;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+}
+
+/*left edge*/
+.cell:nth-child(5n + 1) {
+    border-left-width: 4px;
+}
+
+/*right edge*/
+.cell:nth-child(5n + 5) {
+    border-right-width: 4px;
+}
+
+/*top edge*/
+.cell:nth-child(n+1):nth-child(-n+5) {
+    border-top-width: 4px;
+}
+
+/*bottom edge*/
+.cell:nth-child(n+6):nth-child(-n+10) {
+    border-bottom-width: 4px;
+}
+
+.eraser {
+    height: 30px;
+    margin: auto 10px;
+}

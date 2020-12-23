@@ -1,8 +1,8 @@
 /*ref: https://codepen.io/sdobson/pen/aEWBQw*/
 .board {
     display: grid;
-    grid-template-columns: repeat(9, 50px);
-    grid-template-rows: repeat(9, 50px);
+    grid-template-columns: repeat(9, 40px);
+    grid-template-rows: repeat(9, 40px);
     justify-content: center;
     align-content: center;
     grid-gap: 0;

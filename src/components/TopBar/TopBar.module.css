@@ -6,6 +6,9 @@
 .header {
     background-color: #FB9039;
     height: 50px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: row;
     align-items: center;

@@ -1,10 +1,10 @@
 .main {
-    height: 100px;
-    width: 500px;
+    width: 100%;
     margin: 6px auto;
     display: flex;
     flex-direction: row;
-    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 
 .radioGroup {

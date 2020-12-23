@@ -32,9 +32,7 @@ function Board(props) {
         if (!valid[idx]) {
           inputClass.push(classes.cellError);
         }
-        if (!selected) {
-        } else if (idx === selected) {
-          inputClass.push(classes.cellSelected);
+        if (!selected || idx === selected) {
         } else if (board[idx] !== "0" && board[idx] === board[selected]) {
           inputClass.push(classes.cellSameValue);
         } else if (cellConnected(idx, selected)) {

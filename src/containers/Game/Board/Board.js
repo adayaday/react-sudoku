@@ -2,8 +2,9 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 import classes from "./Board.module.css";
-import { cellConnected, getKeyChar } from "../../../shared/utility";
-import { VALID_INPUT } from "../../../constants";
+import { getKeyChar } from "../../../shared/utility";
+import { cellConnected } from "../../../shared/sudoku";
+import { GAME_TYPE } from "../../../constants";
 
 function Board(props) {
   const {
@@ -13,12 +14,24 @@ function Board(props) {
     setSelectedNum,
     onCellValueChanged,
   } = props;
+  const gameType = useSelector((state) => state.game.gameType);
   const board = useSelector((state) => state.game.board);
-  const cellFixedValue = useSelector((state) => state.game.cellFixedValue);
+  const cfg = useSelector((state) => state.game.cfg);
+  const validInput = useSelector((state) => state.game.validInput);
+  const isGivenValue = useSelector((state) => state.game.isGivenValue);
   const valid = useSelector((state) => state.game.valid);
 
+  const boardClass = [
+    classes.board,
+    gameType === GAME_TYPE.type_x3 ? classes.boardX3 : classes.boardX2,
+  ];
+  const inputClass = [
+    classes.cell,
+    gameType === GAME_TYPE.type_x3 ? classes.cellX3 : classes.cellX2,
+  ];
+
   const onKeyPressed = (index, keyStr) => {
-    if (VALID_INPUT.indexOf(keyStr) > -1) {
+    if (validInput.indexOf(keyStr) > -1) {
       const keyChar = getKeyChar(keyStr);
       onCellValueChanged(index, keyChar);
       setSelectedNum(keyChar);
@@ -26,32 +39,32 @@ function Board(props) {
   };
 
   return (
-    <ul className={classes.board}>
+    <ul className={boardClass.join(" ")}>
       {board.map((cell, idx) => {
-        const inputClass = [classes.cell];
+        const currentInputClass = [...inputClass];
         // set font weight/color
-        if (cellFixedValue[idx]) {
-          inputClass.push(classes.cellFixed);
+        if (isGivenValue[idx]) {
+          currentInputClass.push(classes.cellFixed);
         }
         if (!valid[idx]) {
-          inputClass.push(classes.cellError);
+          currentInputClass.push(classes.cellError);
         }
         // set background color
         if (selectedNum !== "0" && board[idx] === selectedNum) {
-          inputClass.push(classes.cellSameValue);
+          currentInputClass.push(classes.cellSameValue);
         } else if (
           selectedIndex !== null &&
-          cellConnected(idx, selectedIndex)
+          cellConnected(idx, selectedIndex, cfg)
         ) {
-          inputClass.push(classes.cellConnected);
+          currentInputClass.push(classes.cellConnected);
         }
 
         return (
           <li
             key={idx}
-            className={inputClass.join(" ")}
+            className={currentInputClass.join(" ")}
             onClick={() => {
-              if (!cellFixedValue[idx]) {
+              if (!isGivenValue[idx]) {
                 setSelectedIndex(idx);
               } else {
                 setSelectedIndex(null);

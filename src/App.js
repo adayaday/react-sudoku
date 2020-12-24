@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import TopBar from "./components/TopBar/TopBar";
 import MainControl from "./containers/MainControl/MainControl";
 import Game from "./containers/Game/Game";
@@ -8,9 +8,12 @@ import * as actions from "./store/actions";
 
 function App() {
   const dispatch = useDispatch();
-  const onNewGameStart = () => dispatch(actions.initNewGameLoading());
+  const onNewGameStart = useCallback(
+    () => dispatch(actions.initNewGameLoading()),
+    [dispatch]
+  );
 
-  useEffect(() => onNewGameStart(), []);
+  useEffect(() => onNewGameStart(), [onNewGameStart]);
 
   return (
     <div className="App">

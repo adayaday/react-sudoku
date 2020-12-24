@@ -1,91 +1,138 @@
 import * as actionTypes from "../actions/actionsTypes";
+import { updateObject } from "../../shared/utility";
+import * as games3 from "../../asserts/games/games3";
+import * as games2 from "../../asserts/games/games2";
 import {
-  getRemainingCount,
-  updateObject,
-  validate,
-} from "../../shared/utility";
-import * as games from "../../components/games/games";
-import { LEVEL, BOARD_SIZE, BOARD_LENGTH } from "../../constants";
+  LEVEL,
+  GAME_TYPE,
+  VALID_INPUT_x3,
+  VALID_INPUT_x2,
+} from "../../constants";
+import { getRemainingCount, validate } from "../../shared/sudoku";
 
 const initialState = {
   level: LEVEL.Easy,
+  gameType: GAME_TYPE.type_x3,
+  cfg: {
+    board_size: Math.pow(GAME_TYPE.type_x3, 4),
+    board_length: Math.pow(GAME_TYPE.type_x3, 2),
+    box_length: GAME_TYPE.type_x3,
+    n_boxes: GAME_TYPE.type_x3,
+  },
+  validInput: VALID_INPUT_x3,
+  gameList: games3.easy,
   isPlaying: false,
   gameIndex: 0,
-  board: "0".repeat(BOARD_SIZE).split(""),
-  cellFixedValue: Array(BOARD_SIZE).fill(false),
-  valid: Array(BOARD_SIZE).fill(true),
+  board: "0".repeat(Math.pow(GAME_TYPE.type_x3, 4)).split(""),
+  isGivenValue: Array(Math.pow(GAME_TYPE.type_x3, 4)).fill(false),
+  valid: Array(Math.pow(GAME_TYPE.type_x3, 4)).fill(true),
   remainingCount: {
-    0: BOARD_LENGTH,
-    1: BOARD_LENGTH,
-    2: BOARD_LENGTH,
-    3: BOARD_LENGTH,
-    4: BOARD_LENGTH,
-    5: BOARD_LENGTH,
-    6: BOARD_LENGTH,
-    7: BOARD_LENGTH,
-    8: BOARD_LENGTH,
-    9: BOARD_LENGTH,
+    0: Math.pow(GAME_TYPE.type_x3, 2),
+    1: Math.pow(GAME_TYPE.type_x3, 2),
+    2: Math.pow(GAME_TYPE.type_x3, 2),
+    3: Math.pow(GAME_TYPE.type_x3, 2),
+    4: Math.pow(GAME_TYPE.type_x3, 2),
+    5: Math.pow(GAME_TYPE.type_x3, 2),
+    6: Math.pow(GAME_TYPE.type_x3, 2),
+    7: Math.pow(GAME_TYPE.type_x3, 2),
+    8: Math.pow(GAME_TYPE.type_x3, 2),
+    9: Math.pow(GAME_TYPE.type_x3, 2),
   },
 };
 
+const gameTypeChanged = (state, action) => {
+  const { level } = state;
+  const updatedGameList = updateGameList(action.gameType, level);
+  const updatedValidInput =
+    action.gameType === GAME_TYPE.type_x3 ? VALID_INPUT_x3 : VALID_INPUT_x2;
+  const updatedCfg = {
+    board_size: Math.pow(action.gameType, 4),
+    board_length: Math.pow(action.gameType, 2),
+    box_length: action.gameType,
+    n_boxes: action.gameType,
+  };
+  return updateObject(state, {
+    gameType: action.gameType,
+    gameList: updatedGameList,
+    cfg: updatedCfg,
+    validInput: updatedValidInput,
+  });
+};
+
 const levelChanged = (state, action) => {
-  return updateObject(state, { level: action.level });
+  const { gameType } = state;
+  const updatedGameList = updateGameList(gameType, action.level);
+  return updateObject(state, {
+    level: action.level,
+    gameList: updatedGameList,
+  });
+};
+
+const updateGameList = (gameType, level) => {
+  const gameLists = gameType === GAME_TYPE.type_x3 ? games3 : games2;
+  let updatedGameList = null;
+  if (level === LEVEL.Easy) {
+    updatedGameList = gameLists.easy;
+  } else if (level === LEVEL.Medium) {
+    updatedGameList = gameLists.medium;
+  } else {
+    updatedGameList = gameLists.hard;
+  }
+  return updatedGameList;
 };
 
 const newGameLoaded = (state, action) => {
-  let index = 0;
-  if (state.level === LEVEL.Easy) {
-    index = Math.floor(Math.random() * games.easy.length);
-  } else if (state.level === LEVEL.Medium) {
-    index = Math.floor(Math.random() * games.medium.length);
-  } else {
-    index = Math.floor(Math.random() * games.hard.length);
-  }
+  const { gameList } = state;
+  const index = Math.floor(Math.random() * gameList.length);
   return updateObject(
     state,
-    updateObject({ gameIndex: index }, reloadGameData(state, index))
+    updateObject({ gameIndex: index }, reloadGameData(state, gameList, index))
   );
 };
 
 const resetGame = (state, action) => {
-  return updateObject(state, reloadGameData(state, state.gameIndex));
+  return updateObject(
+    state,
+    reloadGameData(state, state.gameList, state.gameIndex)
+  );
 };
 
-const reloadGameData = (state, index) => {
-  let boardString = "";
-  if (state.level === LEVEL.Easy) {
-    boardString = games.easy[index];
-  } else if (state.level === LEVEL.Medium) {
-    boardString = games.medium[index];
-  } else {
-    boardString = games.hard[index];
-  }
+const reloadGameData = (state, gameList, index) => {
+  const { cfg } = state;
+  const boardString = gameList[index];
   const newBoard = boardString.split("");
-  const newValid = Array(BOARD_SIZE).fill(true);
-  const newCellFixedValue = newBoard.map((cell) => cell !== "0");
+  const newValid = newBoard.map(() => true);
+  const updatedIsGivenValue = newBoard.map((cell) => cell !== "0");
   return {
     board: newBoard,
-    cellFixedValue: newCellFixedValue,
+    isGivenValue: updatedIsGivenValue,
     valid: newValid,
-    remainingCount: getRemainingCount(newBoard, { ...state.remainingCount }),
+    remainingCount: getRemainingCount(
+      newBoard,
+      { ...state.remainingCount },
+      cfg
+    ),
   };
 };
 
 const cellValueChanged = (state, action) => {
-  if (state.cellFixedValue[action.index]) {
+  if (state.isGivenValue[action.index]) {
     return state;
   }
-  const newBoard = [...state.board];
+  const { board, cfg, remainingCount } = state;
+  const newBoard = [...board];
   newBoard[action.index] = action.value;
   return updateObject(state, {
     board: newBoard,
-    valid: validate(newBoard),
-    remainingCount: getRemainingCount(newBoard, { ...state.remainingCount }),
+    valid: validate(newBoard, cfg),
+    remainingCount: getRemainingCount(newBoard, { ...remainingCount }, cfg),
   });
 };
 
 const game = (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.GAME_TYPE_CHANGED:
+      return gameTypeChanged(state, action);
     case actionTypes.LEVEL_CHANGED:
       return levelChanged(state, action);
     case actionTypes.NEW_GAME_LOADING:

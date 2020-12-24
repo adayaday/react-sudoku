@@ -1,5 +1,12 @@
 import * as actionTypes from "./actionsTypes";
 
+export const gameTypeChanged = (gameType) => {
+  return {
+    type: actionTypes.GAME_TYPE_CHANGED,
+    gameType: gameType,
+  };
+};
+
 export const levelChanged = (level) => {
   return {
     type: actionTypes.LEVEL_CHANGED,

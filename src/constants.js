@@ -4,13 +4,14 @@ export const LEVEL = {
   Hard: 2,
 };
 
-export const BOARD_SIZE = 81;
-export const BOARD_LENGTH = 9;
-export const BLOCK_LENGTH = 3;
-export const N_BLOCKS = 3;
+export const GAME_TYPE = {
+  type_x2: 2,
+  type_x3: 3,
+};
 
 export const VALID_CLEAR_INPUT = ["Backspace", "Delete", "0"];
-export const VALID_INPUT = [
+export const VALID_INPUT_x2 = [...VALID_CLEAR_INPUT, "1", "2", "3", "4"];
+export const VALID_INPUT_x3 = [
   ...VALID_CLEAR_INPUT,
   "1",
   "2",

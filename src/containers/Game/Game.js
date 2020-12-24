@@ -13,6 +13,7 @@ function Game(props) {
   const [selectedNum, setSelectedNum] = useState("0");
 
   const remainingCount = useSelector((state) => state.game.remainingCount);
+  const gameType = useSelector((state) => state.game.gameType);
 
   const dispatch = useDispatch();
   const onCellValueChanged = (index, value) =>
@@ -45,6 +46,7 @@ function Game(props) {
         onCellValueChanged={onCellValueChanged}
       />
       <InputControl
+        gameType={gameType}
         selectedNum={selectedNum}
         remainingCount={remainingCount}
         onClick={inputControlClickedHandler}

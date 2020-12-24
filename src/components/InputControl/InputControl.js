@@ -1,17 +1,27 @@
 import React from "react";
 import classes from "./InputControl.module.css";
 import eraser from "../../asserts/images/eraser.svg";
+import { GAME_TYPE } from "../../constants";
 
-const inputCells = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+const inputCells_x3 = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+const inputCells_x2 = ["1", "2", "3", "4", "0"];
 
 function InputControl(props) {
-  const { selectedNum, onClick, remainingCount } = props;
+  const { gameType, selectedNum, onClick, remainingCount } = props;
+
+  const inputCells =
+    gameType === GAME_TYPE.type_x3 ? inputCells_x3 : inputCells_x2;
+  const inputCellClass = [
+    classes.cell,
+    gameType === GAME_TYPE.type_x3 ? classes.cellX3 : classes.cellX2,
+  ];
+
   return (
     <ul className={classes.inputControl}>
       {inputCells.map((c, idx) => {
-        const inputCellClass = [classes.cell];
+        const currentInputCellClass = [...inputCellClass];
         if (selectedNum !== "0" && c === selectedNum) {
-          inputCellClass.push(classes.cellSameValue);
+          currentInputCellClass.push(classes.cellSameValue);
         }
 
         const countClass = [classes.count];
@@ -20,7 +30,7 @@ function InputControl(props) {
         }
         return (
           <li
-            className={inputCellClass.join(" ")}
+            className={currentInputCellClass.join(" ")}
             key={idx}
             onClick={() => onClick(c)}
           >

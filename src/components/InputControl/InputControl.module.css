@@ -23,6 +23,12 @@
     position: relative;
 }
 
+.cellX2 {
+}
+
+.cellX3 {
+}
+
 .cellSameValue {
     background-color: #a3d2caB0;
 }
@@ -43,7 +49,12 @@
 }
 
 /*bottom edge*/
-.cell:nth-child(n+6):nth-child(-n+10) {
+.cellX2:nth-child(n+1):nth-child(-n+5) {
+    border-bottom-width: 4px;
+}
+
+/*bottom edge*/
+.cellX3:nth-child(n+6):nth-child(-n+10) {
     border-bottom-width: 4px;
 }
 

@@ -1,4 +1,5 @@
 export {
+  gameTypeChanged,
   levelChanged,
   initNewGameLoading,
   cellValueChanged,

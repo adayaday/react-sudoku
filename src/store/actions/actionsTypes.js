@@ -1,3 +1,4 @@
+export const GAME_TYPE_CHANGED = "GAME_TYPE_CHANGED";
 export const LEVEL_CHANGED = "LEVEL_CHANGED";
 export const NEW_GAME_LOADING = "NEW_GAME_LOADING";
 export const RESET_GAME = "RESET_GAME";

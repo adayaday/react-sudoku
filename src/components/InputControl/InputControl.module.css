@@ -20,6 +20,7 @@
     align-items: center;
     justify-content: center;
     font-size: 40px;
+    position: relative;
 }
 
 .cellSameValue {
@@ -49,4 +50,17 @@
 .eraser {
     height: 30px;
     margin: auto 10px;
+}
+
+.count {
+    position: absolute;
+    top: 1px;
+    right: 2px;
+    font-size: 18px;
+    color: black;
+}
+
+.countZero {
+    color: #FB9039;
+    font-weight: bold;
 }

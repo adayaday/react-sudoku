@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import classes from "./Game.module.css";
 import Board from "./Board/Board";
 import InputControl from "../../components/InputControl/InputControl";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../../store/actions";
 import { Button } from "antd";
 import { getKeyChar } from "../../shared/utility";
@@ -11,6 +11,8 @@ import { getKeyChar } from "../../shared/utility";
 function Game(props) {
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [selectedNum, setSelectedNum] = useState("0");
+
+  const remainingCount = useSelector((state) => state.game.remainingCount);
 
   const dispatch = useDispatch();
   const onCellValueChanged = (index, value) =>
@@ -44,6 +46,7 @@ function Game(props) {
       />
       <InputControl
         selectedNum={selectedNum}
+        remainingCount={remainingCount}
         onClick={inputControlClickedHandler}
       />
     </div>

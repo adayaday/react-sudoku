@@ -95,3 +95,12 @@ export const getBlock = (index) => {
   const [x, y] = getXY(index);
   return Math.floor(y / BLOCK_LENGTH) * N_BLOCKS + Math.floor(x / BLOCK_LENGTH);
 };
+
+export const getRemainingCount = (board, count) => {
+  for (let key in count) {
+    count[key] = BOARD_LENGTH;
+  }
+  count[0] = BOARD_SIZE;
+  board.forEach((c) => count[c]--);
+  return count;
+};

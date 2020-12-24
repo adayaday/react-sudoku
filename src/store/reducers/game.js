@@ -1,7 +1,11 @@
 import * as actionTypes from "../actions/actionsTypes";
-import { updateObject, validate } from "../../shared/utility";
+import {
+  getRemainingCount,
+  updateObject,
+  validate,
+} from "../../shared/utility";
 import * as games from "../../components/games/games";
-import { LEVEL, BOARD_SIZE } from "../../constants";
+import { LEVEL, BOARD_SIZE, BOARD_LENGTH } from "../../constants";
 
 const initialState = {
   level: LEVEL.Easy,
@@ -10,6 +14,18 @@ const initialState = {
   board: "0".repeat(BOARD_SIZE).split(""),
   cellFixedValue: Array(BOARD_SIZE).fill(false),
   valid: Array(BOARD_SIZE).fill(true),
+  remainingCount: {
+    0: BOARD_LENGTH,
+    1: BOARD_LENGTH,
+    2: BOARD_LENGTH,
+    3: BOARD_LENGTH,
+    4: BOARD_LENGTH,
+    5: BOARD_LENGTH,
+    6: BOARD_LENGTH,
+    7: BOARD_LENGTH,
+    8: BOARD_LENGTH,
+    9: BOARD_LENGTH,
+  },
 };
 
 const levelChanged = (state, action) => {
@@ -51,6 +67,7 @@ const reloadGameData = (state, index) => {
     board: newBoard,
     cellFixedValue: newCellFixedValue,
     valid: newValid,
+    remainingCount: getRemainingCount(newBoard, { ...state.remainingCount }),
   };
 };
 
@@ -60,7 +77,11 @@ const cellValueChanged = (state, action) => {
   }
   const newBoard = [...state.board];
   newBoard[action.index] = action.value;
-  return updateObject(state, { board: newBoard, valid: validate(newBoard) });
+  return updateObject(state, {
+    board: newBoard,
+    valid: validate(newBoard),
+    remainingCount: getRemainingCount(newBoard, { ...state.remainingCount }),
+  });
 };
 
 const game = (state = initialState, action) => {

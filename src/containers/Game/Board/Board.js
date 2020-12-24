@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 import classes from "./Board.module.css";
-import { cellConnected } from "../../../shared/utility";
+import { cellConnected, getKeyChar } from "../../../shared/utility";
 import { VALID_INPUT } from "../../../constants";
 
 function Board(props) {
@@ -19,7 +19,9 @@ function Board(props) {
 
   const onKeyPressed = (index, keyStr) => {
     if (VALID_INPUT.indexOf(keyStr) > -1) {
-      onCellValueChanged(index, keyStr);
+      const keyChar = getKeyChar(keyStr);
+      onCellValueChanged(index, keyChar);
+      setSelectedNum(keyChar);
     }
   };
 
@@ -37,7 +39,10 @@ function Board(props) {
         // set background color
         if (selectedNum !== "0" && board[idx] === selectedNum) {
           inputClass.push(classes.cellSameValue);
-        } else if (selectedIndex && cellConnected(idx, selectedIndex)) {
+        } else if (
+          selectedIndex !== null &&
+          cellConnected(idx, selectedIndex)
+        ) {
           inputClass.push(classes.cellConnected);
         }
 

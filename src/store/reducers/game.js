@@ -26,46 +26,7 @@ const initialState = {
   board: "0".repeat(Math.pow(GAME_TYPE.type_x3, 4)).split(""),
   isGivenValue: Array(Math.pow(GAME_TYPE.type_x3, 4)).fill(false),
   valid: Array(Math.pow(GAME_TYPE.type_x3, 4)).fill(true),
-  remainingCount: {
-    0: Math.pow(GAME_TYPE.type_x3, 2),
-    1: Math.pow(GAME_TYPE.type_x3, 2),
-    2: Math.pow(GAME_TYPE.type_x3, 2),
-    3: Math.pow(GAME_TYPE.type_x3, 2),
-    4: Math.pow(GAME_TYPE.type_x3, 2),
-    5: Math.pow(GAME_TYPE.type_x3, 2),
-    6: Math.pow(GAME_TYPE.type_x3, 2),
-    7: Math.pow(GAME_TYPE.type_x3, 2),
-    8: Math.pow(GAME_TYPE.type_x3, 2),
-    9: Math.pow(GAME_TYPE.type_x3, 2),
-  },
-};
-
-const gameTypeChanged = (state, action) => {
-  const { level } = state;
-  const updatedGameList = updateGameList(action.gameType, level);
-  const updatedValidInput =
-    action.gameType === GAME_TYPE.type_x3 ? VALID_INPUT_x3 : VALID_INPUT_x2;
-  const updatedCfg = {
-    board_size: Math.pow(action.gameType, 4),
-    board_length: Math.pow(action.gameType, 2),
-    box_length: action.gameType,
-    n_boxes: action.gameType,
-  };
-  return updateObject(state, {
-    gameType: action.gameType,
-    gameList: updatedGameList,
-    cfg: updatedCfg,
-    validInput: updatedValidInput,
-  });
-};
-
-const levelChanged = (state, action) => {
-  const { gameType } = state;
-  const updatedGameList = updateGameList(gameType, action.level);
-  return updateObject(state, {
-    level: action.level,
-    gameList: updatedGameList,
-  });
+  remainingCount: Array(Math.pow(GAME_TYPE.type_x3, 2) + 1).fill(0),
 };
 
 const updateGameList = (gameType, level) => {
@@ -82,23 +43,41 @@ const updateGameList = (gameType, level) => {
 };
 
 const newGameLoaded = (state, action) => {
-  const { gameList } = state;
-  const index = Math.floor(Math.random() * gameList.length);
+  const { gameType, level } = action;
+  const updatedGameList = updateGameList(gameType, level);
+  const updatedValidInput =
+    gameType === GAME_TYPE.type_x3 ? VALID_INPUT_x3 : VALID_INPUT_x2;
+  const updatedCfg = {
+    board_size: Math.pow(gameType, 4),
+    board_length: Math.pow(gameType, 2),
+    box_length: gameType,
+    n_boxes: gameType,
+  };
+  const index = Math.floor(Math.random() * updatedGameList.length);
   return updateObject(
     state,
-    updateObject({ gameIndex: index }, reloadGameData(state, gameList, index))
+    updateObject(
+      {
+        level: level,
+        gameType: gameType,
+        gameList: updatedGameList,
+        gameIndex: index,
+        validInput: updatedValidInput,
+        cfg: updatedCfg,
+      },
+      reloadGameData(state, updatedGameList, index, updatedCfg)
+    )
   );
 };
 
 const resetGame = (state, action) => {
   return updateObject(
     state,
-    reloadGameData(state, state.gameList, state.gameIndex)
+    reloadGameData(state, state.gameList, state.gameIndex, state.cfg)
   );
 };
 
-const reloadGameData = (state, gameList, index) => {
-  const { cfg } = state;
+const reloadGameData = (state, gameList, index, cfg) => {
   const boardString = gameList[index];
   const newBoard = boardString.split("");
   const newValid = newBoard.map(() => true);
@@ -107,11 +86,7 @@ const reloadGameData = (state, gameList, index) => {
     board: newBoard,
     isGivenValue: updatedIsGivenValue,
     valid: newValid,
-    remainingCount: getRemainingCount(
-      newBoard,
-      { ...state.remainingCount },
-      cfg
-    ),
+    remainingCount: getRemainingCount(newBoard, cfg),
   };
 };
 
@@ -119,22 +94,18 @@ const cellValueChanged = (state, action) => {
   if (state.isGivenValue[action.index]) {
     return state;
   }
-  const { board, cfg, remainingCount } = state;
+  const { board, cfg } = state;
   const newBoard = [...board];
   newBoard[action.index] = action.value;
   return updateObject(state, {
     board: newBoard,
     valid: validate(newBoard, cfg),
-    remainingCount: getRemainingCount(newBoard, { ...remainingCount }, cfg),
+    remainingCount: getRemainingCount(newBoard, cfg),
   });
 };
 
 const game = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.GAME_TYPE_CHANGED:
-      return gameTypeChanged(state, action);
-    case actionTypes.LEVEL_CHANGED:
-      return levelChanged(state, action);
     case actionTypes.NEW_GAME_LOADING:
       return newGameLoaded(state, action);
     case actionTypes.RESET_GAME:

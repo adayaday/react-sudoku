@@ -83,11 +83,9 @@ export const getBox = (index, board_length, box_length, n_boxes) => {
   return Math.floor(y / box_length) * n_boxes + Math.floor(x / box_length);
 };
 
-export const getRemainingCount = (board, count, cfg) => {
+export const getRemainingCount = (board, cfg) => {
   const { board_length } = cfg;
-  for (let key in count) {
-    count[key] = board_length;
-  }
+  const count = board.map(() => board_length);
   count[0] = 0;
   board.forEach((c) => count[c]--);
   count[0] = -count[0];

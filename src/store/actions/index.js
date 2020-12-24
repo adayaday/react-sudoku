@@ -1,7 +1,1 @@
-export {
-  gameTypeChanged,
-  levelChanged,
-  initNewGameLoading,
-  cellValueChanged,
-  resetGame,
-} from "./game";
+export { initNewGameLoading, cellValueChanged, resetGame } from "./game";

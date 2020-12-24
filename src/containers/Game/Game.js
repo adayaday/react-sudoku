@@ -21,7 +21,7 @@ function Game(props) {
 
   const inputControlClickedHandler = (keyStr) => {
     const keyChar = getKeyChar(keyStr);
-    if (selectedIndex) {
+    if (selectedIndex !== null) {
       onCellValueChanged(selectedIndex, keyChar);
     }
     setSelectedNum(keyChar);

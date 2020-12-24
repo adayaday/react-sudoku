@@ -62,11 +62,12 @@ export const validate = (board, cfg) => {
 };
 
 export const cellConnected = (i, j, cfg) => {
-  const { board_length, n_boxes } = cfg;
+  const { board_length, box_length, n_boxes } = cfg;
   return (
     i % board_length === j % board_length ||
     Math.floor(i / board_length) === Math.floor(j / board_length) ||
-    getBox(i, board_length, n_boxes) === getBox(j, board_length, n_boxes)
+    getBox(i, board_length, box_length, n_boxes) ===
+      getBox(j, board_length, box_length, n_boxes)
   );
 };
 
@@ -77,13 +78,13 @@ export const getXY = (index, board_length) => [
   Math.floor(index / board_length),
 ];
 
-export const getBox = (index, box_length, n_boxes) => {
-  const [x, y] = getXY(index);
+export const getBox = (index, board_length, box_length, n_boxes) => {
+  const [x, y] = getXY(index, board_length);
   return Math.floor(y / box_length) * n_boxes + Math.floor(x / box_length);
 };
 
 export const getRemainingCount = (board, count, cfg) => {
-  const { board_size, board_length } = cfg;
+  const { board_length } = cfg;
   for (let key in count) {
     count[key] = board_length;
   }

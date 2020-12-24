@@ -1,5 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import {
+  createMuiTheme,
+  makeStyles,
+  ThemeProvider,
+} from "@material-ui/core/styles";
 import { createStore, combineReducers, compose } from "redux";
 import { Provider } from "react-redux";
 
@@ -7,6 +12,17 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import gameReducer from "./store/reducers/game";
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#FB9039",
+    },
+    secondary: {
+      main: "#a3d2ca",
+    },
+  },
+});
 
 const composeEnhancers =
   (process.env.REACT_APP_NODE_ENVX === "development"
@@ -20,9 +36,11 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer, composeEnhancers());
 
 ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <ThemeProvider theme={theme}>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </ThemeProvider>,
   document.getElementById("root")
 );
 

@@ -12,36 +12,3 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-button {
-    font: inherit;
-    background: #FB9039;
-    padding: 0.5rem 1rem;
-    color: white;
-    border: 1px solid #FB9039;
-    margin: 0.5rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover,
-button:active {
-    background: white;
-    color: #FB9039;
-}
-
-button:focus {
-    outline: none;
-}
-
-button.button-outline {
-    background: white;
-    color: #FB9039;
-}
-
-button.button-outline:hover,
-button.button-outline:active {
-    background: #FB9039;
-    color: white;
-    box-shadow: none;
-}

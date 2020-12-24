@@ -5,8 +5,8 @@ import Board from "./Board/Board";
 import InputControl from "../../components/InputControl/InputControl";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../../store/actions";
-import { Button } from "antd";
 import { getKeyChar } from "../../shared/utility";
+import { Button } from "@material-ui/core";
 
 function Game(props) {
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -30,7 +30,8 @@ function Game(props) {
   return (
     <div className={classes.Game}>
       <Button
-        type="primary"
+        variant="outlined"
+        color="primary"
         onClick={() => {
           setSelectedIndex(null);
           setSelectedNum("0");

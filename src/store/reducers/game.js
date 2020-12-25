@@ -26,6 +26,7 @@ const initialState = {
   board: "0".repeat(Math.pow(GAME_TYPE.type_x3, 4)).split(""),
   isGivenValue: Array(Math.pow(GAME_TYPE.type_x3, 4)).fill(false),
   valid: Array(Math.pow(GAME_TYPE.type_x3, 4)).fill(true),
+  solved: false,
   remainingCount: Array(Math.pow(GAME_TYPE.type_x3, 2) + 1).fill(0),
 };
 
@@ -80,12 +81,13 @@ const resetGame = (state, action) => {
 const reloadGameData = (state, gameList, index, cfg) => {
   const boardString = gameList[index];
   const newBoard = boardString.split("");
-  const newValid = newBoard.map(() => true);
+  const newValid = newBoard.map((c) => c !== "0");
   const updatedIsGivenValue = newBoard.map((cell) => cell !== "0");
   return {
     board: newBoard,
     isGivenValue: updatedIsGivenValue,
     valid: newValid,
+    solved: newValid.every((v) => v),
     remainingCount: getRemainingCount(newBoard, cfg),
   };
 };
@@ -97,9 +99,11 @@ const cellValueChanged = (state, action) => {
   const { board, cfg } = state;
   const newBoard = [...board];
   newBoard[action.index] = action.value;
+  const newValid = validate(newBoard, cfg);
   return updateObject(state, {
     board: newBoard,
-    valid: validate(newBoard, cfg),
+    valid: newValid,
+    solved: newValid.every((v) => v),
     remainingCount: getRemainingCount(newBoard, cfg),
   });
 };

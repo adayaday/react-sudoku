@@ -1,7 +1,7 @@
 export const validate = (board, cfg) => {
   const { board_size, board_length, box_length } = cfg;
-  const valid = Array(board_size).fill(true);
-  let currentValid = true;
+  const valid = Array(board_size).fill(false);
+  let currentValid = false;
   let currentIndex = 0;
   for (let x = 0; x < board_length; x++) {
     for (let y = 0; y < board_length; y++) {

@@ -8,10 +8,12 @@ import { getKeyChar } from "../../shared/utility";
 import { Button } from "@material-ui/core";
 import Board from "./Board/Board";
 import InputControl from "../../components/InputControl/InputControl";
+import SolvedDialog from "../../components/SolvedDialog/SolvedDialog";
 
 function Game(props) {
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [selectedNum, setSelectedNum] = useState("0");
+  const [solvedModalOpen, setSolvedModalOpen] = useState(false);
   const [time, setTime] = useState(0);
   const initialTime = useRef(new Date().getTime());
   const setTimeCallback = useRef((t) => setTime(t));
@@ -19,6 +21,7 @@ function Game(props) {
   const remainingCount = useSelector((state) => state.game.remainingCount);
   const gameType = useSelector((state) => state.game.gameType);
   const isPlaying = useSelector((state) => state.game.isPlaying);
+  const solved = useSelector((state) => state.game.solved);
 
   const dispatch = useDispatch();
   const onCellValueChanged = (index, value) =>
@@ -44,6 +47,10 @@ function Game(props) {
   };
 
   useEffect(() => {
+    if (solved) {
+      setSolvedModalOpen(true);
+      return;
+    }
     if (!isPlaying) {
       setSelectedNum(null);
       setSelectedIndex(null);
@@ -58,11 +65,17 @@ function Game(props) {
         clearInterval(timer);
       };
     }
-  }, [setSelectedNum, setSelectedIndex, isPlaying]);
+  }, [setSelectedNum, setSelectedIndex, isPlaying, solved]);
 
   return (
     <div className={classes.Game}>
       <div className={classes.topControl}>
+        {solvedModalOpen ? (
+          <SolvedDialog
+            onClose={() => setSolvedModalOpen(false)}
+            timeStr={new Date(time * 1000).toISOString().substr(11, 8)}
+          />
+        ) : null}
         <Button
           color="secondary"
           onClick={timerClickedHandler}

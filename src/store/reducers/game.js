@@ -104,6 +104,14 @@ const cellValueChanged = (state, action) => {
   });
 };
 
+const playingStarted = (state, action) => {
+  return updateObject(state, { isPlaying: true });
+};
+
+const playingStopped = (state, action) => {
+  return updateObject(state, { isPlaying: false });
+};
+
 const game = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.NEW_GAME_LOADING:
@@ -112,6 +120,10 @@ const game = (state = initialState, action) => {
       return resetGame(state, action);
     case actionTypes.CELL_VALUE_CHANGED:
       return cellValueChanged(state, action);
+    case actionTypes.PLAYING_STARTED:
+      return playingStarted(state, action);
+    case actionTypes.PLAYING_STOPPED:
+      return playingStopped(state, action);
     default:
       return state;
   }

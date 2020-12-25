@@ -13,4 +13,4 @@ function TopBar(props) {
   );
 }
 
-export default TopBar;
+export default React.memo(TopBar);

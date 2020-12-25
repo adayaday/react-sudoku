@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import classes from "./Game.module.css";
 import Board from "./Board/Board";
@@ -14,18 +14,32 @@ function Game(props) {
 
   const remainingCount = useSelector((state) => state.game.remainingCount);
   const gameType = useSelector((state) => state.game.gameType);
+  const isPlaying = useSelector((state) => state.game.isPlaying);
 
   const dispatch = useDispatch();
   const onCellValueChanged = (index, value) =>
     dispatch(actions.cellValueChanged(index, value));
+  const onPlayingStarted = () => dispatch(actions.playingStarted());
+
+  const cellClickedHandler = () => {
+    onPlayingStarted();
+  };
 
   const inputControlClickedHandler = (keyStr) => {
+    onPlayingStarted();
     const keyChar = getKeyChar(keyStr);
     if (selectedIndex !== null) {
       onCellValueChanged(selectedIndex, keyChar);
     }
     setSelectedNum(keyChar);
   };
+
+  useEffect(() => {
+    if (!isPlaying) {
+      setSelectedNum(null);
+      setSelectedIndex(null);
+    }
+  }, [setSelectedNum, setSelectedIndex, isPlaying]);
 
   return (
     <div className={classes.Game}>
@@ -44,6 +58,7 @@ function Game(props) {
         setSelectedIndex={setSelectedIndex}
         selectedNum={selectedNum}
         setSelectedNum={setSelectedNum}
+        onCellClicked={cellClickedHandler}
         onCellValueChanged={onCellValueChanged}
       />
       <InputControl

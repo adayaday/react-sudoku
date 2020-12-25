@@ -21,3 +21,15 @@ export const cellValueChanged = (index, value) => {
     value: value,
   };
 };
+
+export const playingStarted = () => {
+  return {
+    type: actionTypes.PLAYING_STARTED,
+  };
+};
+
+export const playingStopped = () => {
+  return {
+    type: actionTypes.PLAYING_STOPPED,
+  };
+};

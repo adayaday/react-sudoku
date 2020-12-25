@@ -13,10 +13,17 @@ function MainControl(props) {
   const onNewGameStart = (newGameType, newGameLevel) =>
     dispatch(actions.initNewGameLoading(newGameType, newGameLevel));
   const onGameReset = () => dispatch(actions.resetGame());
+  const onPlayingStopped = () => dispatch(actions.playingStopped());
 
   const startHandler = (newGameType, newGameLevel) => {
+    onPlayingStopped();
     onNewGameStart(newGameType, newGameLevel);
     setDialogOpen(false);
+  };
+
+  const resetHandler = () => {
+    onPlayingStopped();
+    onGameReset();
   };
 
   return (
@@ -30,13 +37,13 @@ function MainControl(props) {
         />
       ) : null}
       <Button
-        variant="outlined"
+        variant="contained"
         color="primary"
         onClick={() => setDialogOpen(true)}
       >
         New Game
       </Button>
-      <Button variant="outlined" color="primary" onClick={onGameReset}>
+      <Button variant="outlined" color="primary" onClick={resetHandler}>
         Reset
       </Button>
     </div>

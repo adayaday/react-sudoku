@@ -13,6 +13,7 @@ function Board(props) {
     selectedNum,
     setSelectedNum,
     onCellValueChanged,
+    onCellClicked,
   } = props;
   const gameType = useSelector((state) => state.game.gameType);
   const board = useSelector((state) => state.game.board);
@@ -20,6 +21,7 @@ function Board(props) {
   const validInput = useSelector((state) => state.game.validInput);
   const isGivenValue = useSelector((state) => state.game.isGivenValue);
   const valid = useSelector((state) => state.game.valid);
+  const isPlaying = useSelector((state) => state.game.isPlaying);
 
   const boardClass = [
     classes.board,
@@ -29,6 +31,18 @@ function Board(props) {
     classes.cell,
     gameType === GAME_TYPE.type_x3 ? classes.cellX3 : classes.cellX2,
   ];
+
+  const clickHandler = (cell, idx) => {
+    if (!isPlaying) {
+      onCellClicked();
+    }
+    if (!isGivenValue[idx]) {
+      setSelectedIndex(idx);
+    } else {
+      setSelectedIndex(null);
+    }
+    setSelectedNum(cell);
+  };
 
   const onKeyPressed = (index, keyStr) => {
     if (validInput.indexOf(keyStr) > -1) {
@@ -63,14 +77,7 @@ function Board(props) {
           <li
             key={idx}
             className={currentInputClass.join(" ")}
-            onClick={() => {
-              if (!isGivenValue[idx]) {
-                setSelectedIndex(idx);
-              } else {
-                setSelectedIndex(null);
-              }
-              setSelectedNum(cell);
-            }}
+            onClick={() => clickHandler(cell, idx)}
             onKeyDownCapture={(e) => onKeyPressed(idx, e.key)}
             tabIndex="-1"
           >

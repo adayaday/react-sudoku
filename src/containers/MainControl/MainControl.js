@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../../store/actions";
 import { Button } from "@material-ui/core";
 import NewGame from "../../components/NewGame/NewGame";
+import { Add, RotateLeft } from "@material-ui/icons";
 
 function MainControl(props) {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -39,12 +40,18 @@ function MainControl(props) {
       <Button
         variant="contained"
         color="primary"
+        startIcon={<Add />}
         onClick={() => setDialogOpen(true)}
       >
         New Game
       </Button>
-      <Button variant="outlined" color="primary" onClick={resetHandler}>
-        Reset
+      <Button
+        variant="outlined"
+        color="primary"
+        startIcon={<RotateLeft />}
+        onClick={resetHandler}
+      >
+        Reset Game
       </Button>
     </div>
   );

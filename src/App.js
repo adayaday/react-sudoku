@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useRef } from "react";
 import TopBar from "./components/TopBar/TopBar";
 import MainControl from "./containers/MainControl/MainControl";
 import Game from "./containers/Game/Game";
@@ -16,7 +16,9 @@ function App() {
     [dispatch]
   );
 
-  useEffect(() => onNewGameStart(gameType, level), []);
+  const initAppRef = useRef(() => onNewGameStart(gameType, level));
+
+  useEffect(() => initAppRef.current(), [initAppRef]);
 
   return (
     <div className="App">

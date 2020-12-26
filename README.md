@@ -22,8 +22,9 @@ the browser.
 
 ## Technical Details
 
-* x2 mode game lists are pre-generated using DFS algorithm (written in Java, not included here).
-* x3 mode game lists are copied
+* x2 mode easy/medium/hard game lists and x3 mode easy/medium game lists are pre-generated using DFS algorithm to
+  guarantee a unique solution (written in Java, not included here).
+* x3 mode hard game lists are copied
   from [andreynering/sudoku](https://github.com/andreynering/sudoku/blob/master/js/boards.js).
 * packages used: [redux](https://react-redux.js.org/), [material-ui](https://material-ui.com/).
 

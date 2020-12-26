@@ -28,6 +28,11 @@ function Game(props) {
     dispatch(actions.cellValueChanged(index, value));
   const onPlayingStarted = () => dispatch(actions.playingStarted());
 
+  const cellValueChangedHandler = (index, value) => {
+    onCellValueChanged(index, value);
+    setSelectedIndex(null);
+  };
+
   const cellClickedHandler = () => {
     onPlayingStarted();
   };
@@ -36,7 +41,7 @@ function Game(props) {
     onPlayingStarted();
     const keyChar = getKeyChar(keyStr);
     if (selectedIndex !== null) {
-      onCellValueChanged(selectedIndex, keyChar);
+      cellValueChangedHandler(selectedIndex, keyChar);
     }
     setSelectedNum(keyChar);
   };
@@ -101,7 +106,7 @@ function Game(props) {
         selectedNum={selectedNum}
         setSelectedNum={setSelectedNum}
         onCellClicked={cellClickedHandler}
-        onCellValueChanged={onCellValueChanged}
+        onCellValueChanged={cellValueChangedHandler}
       />
       <InputControl
         gameType={gameType}

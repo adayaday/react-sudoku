@@ -54,7 +54,10 @@ const newGameLoaded = (state, action) => {
     box_length: gameType,
     n_boxes: gameType,
   };
-  const index = Math.floor(Math.random() * updatedGameList.length);
+  let index = action.gameIndex;
+  if (index < 0 || index >= updatedGameList.length) {
+    index = Math.floor(Math.random() * updatedGameList.length);
+  }
   return updateObject(
     state,
     updateObject(

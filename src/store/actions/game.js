@@ -1,10 +1,11 @@
 import * as actionTypes from "./actionsTypes";
 
-export const initNewGameLoading = (gameType, level) => {
+export const initNewGameLoading = (gameType, level, gameIndex) => {
   return {
     type: actionTypes.NEW_GAME_LOADING,
     gameType: gameType,
     level: level,
+    gameIndex: gameIndex,
   };
 };
 

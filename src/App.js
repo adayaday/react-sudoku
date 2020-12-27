@@ -12,7 +12,7 @@ function App() {
   const dispatch = useDispatch();
   const onNewGameStart = useCallback(
     (newGameType, newLevel) =>
-      dispatch(actions.initNewGameLoading(newGameType, newLevel)),
+      dispatch(actions.initNewGameLoading(newGameType, newLevel, -1)),
     [dispatch]
   );
 

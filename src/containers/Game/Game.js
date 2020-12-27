@@ -20,6 +20,8 @@ function Game(props) {
 
   const remainingCount = useSelector((state) => state.game.remainingCount);
   const gameType = useSelector((state) => state.game.gameType);
+  const level = useSelector((state) => state.game.level);
+  const gameIndex = useSelector((state) => state.game.gameIndex);
   const isPlaying = useSelector((state) => state.game.isPlaying);
   const solved = useSelector((state) => state.game.solved);
 
@@ -79,6 +81,7 @@ function Game(props) {
           <SolvedDialog
             onClose={() => setSolvedModalOpen(false)}
             timeStr={new Date(time * 1000).toISOString().substr(11, 8)}
+            gameId={`x${gameType}-${level}-${gameIndex}`}
           />
         ) : null}
         <Button

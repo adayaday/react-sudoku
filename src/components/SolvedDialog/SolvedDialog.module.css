@@ -3,3 +3,12 @@
     margin: auto;
     width: 60%;
 }
+
+.gameId {
+    font-weight: bold;
+}
+
+.time {
+    font-weight: bold;
+    color: #FB9039;
+}

@@ -17,7 +17,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 function SolvedDialog(props) {
-  const { onClose, timeStr } = props;
+  const { onClose, timeStr, gameId } = props;
   return (
     <Dialog
       open={true}
@@ -32,7 +32,8 @@ function SolvedDialog(props) {
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-slide-description">
-          You solved the sudoku in <b>{timeStr}</b>.
+          You solved the sudoku <span className={classes.gameId}>{gameId}</span>{" "}
+          in <span className={classes.time}>{timeStr}</span>.
         </DialogContentText>
         <img src={butterfly} className={classes.img} alt="butterfly" />
       </DialogContent>

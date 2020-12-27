@@ -14,11 +14,13 @@ import {
 } from "@material-ui/core";
 import { GAME_TYPE, LEVEL } from "../../constants";
 import classes from "./NewGame.module.css";
+import TextField from "@material-ui/core/TextField";
 
 function NewGame(props) {
   const { gameType, level, onStart, onClose } = props;
   const [newGameType, setNewGameType] = useState(gameType);
   const [newLevel, setNewLevel] = useState(level);
+  const [gameIndex, setGameIndex] = useState(-1);
 
   let gameTypeRadioButtons = [];
   for (let key in GAME_TYPE) {
@@ -81,12 +83,29 @@ function NewGame(props) {
             </RadioGroup>
           </FormControl>
         </div>
+        <div className={classes.radioDiv}>
+          <FormControl component="fieldset">
+            <FormLabel component="legend">Game index</FormLabel>
+            <TextField
+              id="standard-number"
+              type="number"
+              placeholder="Select Random Game"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onChange={(e) => setGameIndex(parseInt(e.target.value))}
+            />
+          </FormControl>
+        </div>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
           Cancel
         </Button>
-        <Button onClick={() => onStart(newGameType, newLevel)} color="primary">
+        <Button
+          onClick={() => onStart(newGameType, newLevel, gameIndex)}
+          color="primary"
+        >
           Start
         </Button>
       </DialogActions>

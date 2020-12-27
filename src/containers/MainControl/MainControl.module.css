@@ -5,8 +5,13 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-around;
+    align-items: center;
 }
 
 .radioGroup {
     margin: auto 20px;
+}
+
+.game {
+    width: 150px;
 }
